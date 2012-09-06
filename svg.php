@@ -39,23 +39,19 @@ class Svg
      * @param   int $y
      * @param   int $width
      * @param   int $height
-     * @param   string  $fill
-     * @param   string  $stroke
-     * @param   int $strokeWidth
+     * @param   array   $attrs
      * @return  void
      */
-    publIc function addRect($x, $y, $width, $height, $fill=null, $stroke=null, $strokeWidth=null)
+    public function addRect($x, $y, $width, $height, $attrs=array())
     {
         $rect = $this->root_node->addChild('rect');
 
-        $rect->addAttribute('x', $x);
-        $rect->addAttribute('y', $y);
-        $rect->addAttribute('width', $width);
-        $rect->addAttribute('height', $height);
+        $attrs['x'] = $x;
+        $attrs['y'] = $y;
+        $attrs['width'] = $width;
+        $attrs['height'] = $height;
 
-        if ($fill != null) $rect->addAttribute('fill', $fill);
-        if ($stroke != null) $rect->addAttribute('stroke', $stroke);
-        if ($strokeWidth != null) $rect->addAttribute('stroke-width', $strokeWidth);
+        $this->setAttributes($rect, $attrs);
     }
 
     /**
@@ -64,22 +60,18 @@ class Svg
      * @param   int $cx
      * @param   int $cy
      * @param   int $radius
-     * @param   string  $fill
-     * @param   string  $stroke
-     * @param   int $strokeWidth
+     * @param   array   $attrs
      * @return  void
      */
-    public function addCircle($cx, $cy, $radius, $fill=null, $stroke=null, $strokeWidth=null)
+    public function addCircle($cx, $cy, $radius, $attrs=array())
     {
         $circle = $this->root_node->addChild('circle');
 
-        $circle->addAttribute('cx', $cx);
-        $circle->addAttribute('cy', $cy);
-        $circle->addAttribute('r', $radius);
+        $attrs['cx'] = $cx;
+        $attrs['cy'] = $cy;
+        $attrs['r'] = $radius;
 
-        if ($fill != null) $circle->addAttribute('fill', $fill);
-        if ($stroke != null) $circle->addAttribute('stroke', $stroke);
-        if ($strokeWidth != null) $circle->addAttribute('stroke-width', $strokeWidth);
+        $this->setAttributes($circle, $attrs);
     }
 
     /**
@@ -89,21 +81,19 @@ class Svg
      * @param   int $starty
      * @param   int $endx
      * @param   int $endy
-     * @param   string  $stroke
-     * @param   int $strokeWidth
+     * @param   array   $attrs
      * @return  void
      */
-    public function addLine($startx, $starty, $endx, $endy, $stroke=null, $strokeWidth=null)
+    public function addLine($startx, $starty, $endx, $endy, $attrs=array())
     {
         $line = $this->root_node->addChild('line');
 
-        $line->addAttribute('x1', $startx);
-        $line->addAttribute('y1', $starty);
-        $line->addAttribute('x2', $endx);
-        $line->addAttribute('y2', $endy);
+        $attrs['x1'] = $startx;
+        $attrs['y1'] = $starty;
+        $attrs['x2'] = $endx;
+        $attrs['y2'] = $endy;
 
-        if ($stroke != null) $line->addAttribute('stroke', $stroke);
-        if ($strokeWidth != null) $line->addAttribute('stroke-width', $strokeWidth);
+        $this->setAttributes($line, $attrs);
     }
 
     /**
@@ -113,12 +103,10 @@ class Svg
      * occupying its own index in the array.
      *
      * @param   array   $points
-     * @param   string  $fill
-     * @param   string  $stroke
-     * @param   int $strokeWidth
+     * @param   array   $attrs
      * @return  void
      */
-    public function addPolyline($points, $fill=null, $stroke=null, $strokeWidth=null)
+    public function addPolyline($points, $attrs=array())
     {
         $num_points = count($points);
         if ($num_points % 2 != 0)
@@ -134,31 +122,36 @@ class Svg
             $points_str .= "$pointx,$pointy ";
         }
 
-        $polyline->addAttribute('points', $points_str);
-
-        if ($fill != null) $polyline->addAttribute('fill', $fill);
-        if ($stroke != null) $polyline->addAttribute('stroke', $stroke);
-        if ($strokeWidth != null) $polyline->addAttribute('stroke-width', $strokeWidth);
+        $attrs['points'] = $points_str;
+        $this->setAttributes($polyline, $attrs);
     }
 
     /**
      * Add a path to the image.
      *
      * @param   string  $commands
-     * @param   string  $fill
-     * @param   string  $stroke
-     * @param   int $strokeWidth
+     * @param   array   $attrs
      * @return  void
      */
-    public function addPath($commands, $fill=null, $stroke=null, $strokeWidth=null)
+    public function addPath($commands, $attrs=array())
     {
         $path = $this->root_node->addChild('path');
+        $attrs['d'] = $commands;
+        $this->setAttributes($path, $attrs);
+    }
 
-        $path->addAttribute('d', $commands);
-
-        if ($fill != null) $path->addAttribute('fill', $fill);
-        if ($stroke != null) $path->addAttribute('stroke', $stroke);
-        if ($strokeWidth != null) $path->addAttribute('stroke-width', $strokeWidth);
+    /**
+     * Set attributes on the SimpleXMLElement.
+     *
+     * @param   SimpleXMLElement    $element
+     * @param   array   $attributes
+     * @return  void
+     */
+    protected function setAttributes(SimpleXMLElement $element, $attributes)
+    {
+        foreach ($attributes as $name => $value) {
+            $element->addAttribute($name, $value);
+        }
     }
 
     /**
