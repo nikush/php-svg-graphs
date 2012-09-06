@@ -141,6 +141,23 @@ class Svg
     }
 
     /**
+     * Add text to the image.
+     *
+     * @param   string  $value
+     * @param   int $x
+     * @param   int $y
+     * @param   array   $attrs
+     * @return  void
+     */
+    public function addText($value, $x, $y, $attrs=array())
+    {
+        $text = $this->root_node->addChild('text', $value);
+        $attrs['x'] = $x;
+        $attrs['y'] = $y;
+        $this->setAttributes($text, $attrs);
+    }
+
+    /**
      * Set attributes on the SimpleXMLElement.
      *
      * @param   SimpleXMLElement    $element
