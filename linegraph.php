@@ -34,7 +34,7 @@ class LineGraph extends Graph
      */
     private function draw_line()
     {
-        $values = count($this->data);
+        $values = count($this->data_values);
         $section_width = $this->bounds->width / ($values - 1);
 
         $line_style = array(
@@ -47,7 +47,7 @@ class LineGraph extends Graph
 
         for ($i = 0; $i < $values; $i++) {
             $x = $this->bounds->left + ($i * $section_width);
-            $y = $this->bounds->bottom - ($this->axis_ratio * $this->data[$i]);
+            $y = $this->bounds->bottom - ($this->axis_ratio * $this->data_values[$i]);
             array_push($points, $x, $y);
         }
 

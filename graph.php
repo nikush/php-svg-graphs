@@ -14,12 +14,27 @@ class Graph
     protected $height;
 
     /**
-     * @var array
+     * @var array   The complete data set.
      */
-    protected $data;
+    protected $data_set;
 
     /**
-     * @var Svg The svg object to draw on.
+     * @var array   The values from the data set.
+     */
+    protected $data_values;
+
+    /**
+     * @var array   The labels from the data set.
+     */
+    protected $data_labels;
+
+    /**
+     * @var boolean Indicates if data set is labeled.
+     */
+    protected $data_is_labeled;
+
+    /**
+     * @var Svg The SVG object to draw on.
      */
     protected $canvas;
 
@@ -53,6 +68,7 @@ class Graph
         '#11af11',  // dark green
         '#b11168',  // pink
          */
+        '#2BA6CB',  // light blue
         '#eeaa50',  // orange
         '#d0ea4e',  // green
         '#ca43ca',  // purple
@@ -69,13 +85,16 @@ class Graph
      *
      * @param   int $width
      * @param   int $hight
-     * @param   array   $data
+     * @param   array   $data_set
      */
-    public function __construct($width, $height, $data)
+    public function __construct($width, $height, $data_set)
     {
         $this->width = $width;
         $this->height = $height;
-        $this->data = $data;
+        $this->data_set = $data_set;
+        $this->data_values = array_values($data_set);
+        $this->data_labels = array_keys($data_set);
+        $this->data_is_labeled = !is_int($this->data_labels[0]);
 
         $margin = 10;
         $inner_width = $width - ($margin * 2);
@@ -109,7 +128,7 @@ class Graph
      */
     protected function draw_axis()
     {
-        $max_val = max($this->data);
+        $max_val = max($this->data_set);
         $tick = $this->calculate_tick($max_val);
         $ticks = floor($max_val / $tick);
         $this->axis_ratio = $this->bounds->height / $max_val;
@@ -153,6 +172,22 @@ class Graph
         // top and bottom numbers
         $this->canvas->addText('0', $this->bounds->left-5, $this->bounds->bottom+5, $y_axis_text_style);
         $this->canvas->addText($max_val, $this->bounds->left-5, $this->bounds->top+5, $y_axis_text_style);
+
+        // x axis labels
+        if ($this->data_is_labeled) {
+            $label_style = array('text-anchor' => 'middle');
+            foreach ($this->data_labels as $i => $label) {
+                $values = count($this->data_values);
+                $section_width = $this->bounds->width / $values;
+
+                $this->canvas->addText(
+                    $label,
+                    $this->bounds->left + ($section_width / 2) + ($section_width * $i),
+                    $this->bounds->bottom + 15,
+                    $label_style
+                );
+            }
+        }
     }
 
     /**

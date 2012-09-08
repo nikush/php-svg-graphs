@@ -12,11 +12,11 @@ class BarGraph extends Graph
      *
      * @param   int $width
      * @param   int $hight
-     * @param   array   $data
+     * @param   array   $data_set
      */
-    public function __construct($width, $height, $data)
+    public function __construct($width, $height, $data_set)
     {
-        parent::__construct($width, $height, $data);
+        parent::__construct($width, $height, $data_set);
 
         // background
         $bg_style = array('fill' => '#eee', 'stroke' => '#ddd', 'stroke-width' => 2);
@@ -34,14 +34,13 @@ class BarGraph extends Graph
      */
     private function draw_bars()
     {
-        $values = count($this->data);
+        $values = count($this->data_values);
         $section_width = $this->bounds->width / $values;
 
-        $bar_style = array();
+        $bar_style = array('fill' => $this->next_colour());
 
         for ($i = 0; $i < $values; $i++) {
-            $bar_height = $this->data[$i] * $this->axis_ratio;
-            $bar_style['fill'] = $this->next_colour();
+            $bar_height = $this->data_values[$i] * $this->axis_ratio;
 
             $this->canvas->addRect(
                 $this->bounds->left + ($section_width * $i) + 5,
