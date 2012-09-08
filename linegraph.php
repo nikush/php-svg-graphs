@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Draw an SVG bar graph.
+ * Draw an SVG line graph.
  *
  * @auhtor  Nikush Patel
  */
-class BarGraph extends Graph
+class LineGraph extends Graph
 {
     /**
-     * Generate a bar graph.
+     * Generate a line graph.
      *
      * @param   int $width
      * @param   int $hight
@@ -24,7 +24,7 @@ class BarGraph extends Graph
 
         $this->draw_axis();
 
-        $this->draw_bars();
+        $this->draw_line();
     }
 
     /**
@@ -32,24 +32,25 @@ class BarGraph extends Graph
      *
      * @return  void
      */
-    private function draw_bars()
+    private function draw_line()
     {
         $values = count($this->data);
-        $section_width = $this->bounds->width / $values;
+        $section_width = $this->bounds->width / ($values - 1);
 
-        $bar_style = array();
+        $line_style = array(
+            'fill' => 'none',
+            'stroke' => $this->next_colour(),
+            'stroke-width' => 2
+        );
+
+        $points = array();
 
         for ($i = 0; $i < $values; $i++) {
-            $bar_height = $this->data[$i] * $this->axis_ratio;
-            $bar_style['fill'] = $this->next_colour();
-
-            $this->canvas->addRect(
-                $this->bounds->left + ($section_width * $i) + 5,
-                $this->bounds->bottom - $bar_height,
-                $section_width-10,
-                $bar_height,
-                $bar_style
-            );
+            $x = $this->bounds->left + ($i * $section_width);
+            $y = $this->bounds->bottom - ($this->axis_ratio * $this->data[$i]);
+            array_push($points, $x, $y);
         }
+
+        $this->canvas->addPolyline($points, $line_style);
     }
 }
