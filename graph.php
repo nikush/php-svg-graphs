@@ -116,6 +116,7 @@ class Graph
 
         $axis_style = array('stroke' => '#999', 'stroke-width' => 2, 'fill' => 'none');
         $tick_style = array('stroke' => '#bbb', 'stroke-width' => 1);
+        $y_axis_text_style = array('text-anchor' => 'end');
 
         // x and y axis
         $this->canvas->addPolyline(
@@ -137,7 +138,7 @@ class Graph
                 $tick_line_y,
                 $tick_style
             );
-            $this->canvas->addText($tick * $i, $this->bounds->left-15, $tick_line_y+5);
+            $this->canvas->addText($tick * $i, $this->bounds->left-5, $tick_line_y+5, $y_axis_text_style);
         }
 
         // top line
@@ -150,8 +151,8 @@ class Graph
         );
 
         // top and bottom numbers
-        $this->canvas->addText('0', $this->bounds->left-15, $this->bounds->bottom+5);
-        $this->canvas->addText($max_val, $this->bounds->left-15, $this->bounds->top+5);
+        $this->canvas->addText('0', $this->bounds->left-5, $this->bounds->bottom+5, $y_axis_text_style);
+        $this->canvas->addText($max_val, $this->bounds->left-5, $this->bounds->top+5, $y_axis_text_style);
     }
 
     /**
