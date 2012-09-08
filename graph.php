@@ -176,13 +176,15 @@ class Graph
         // x axis labels
         if ($this->data_is_labeled) {
             $label_style = array('text-anchor' => 'middle');
+            $values = count($this->data_values);
+            $section_width = $this->bounds->width / $values;
+            $half_section = $section_width / 2;
+
             foreach ($this->data_labels as $i => $label) {
-                $values = count($this->data_values);
-                $section_width = $this->bounds->width / $values;
 
                 $this->canvas->addText(
                     $label,
-                    $this->bounds->left + ($section_width / 2) + ($section_width * $i),
+                    $this->bounds->left + $half_section + ($section_width * $i),
                     $this->bounds->bottom + 15,
                     $label_style
                 );
