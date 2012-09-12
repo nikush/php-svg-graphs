@@ -1,6 +1,9 @@
 <?php
 require_once('svg.php');
 
+/**
+ * Abstract graph class.
+ */
 class Graph
 {
     /**
@@ -133,60 +136,61 @@ class Graph
         $ticks = floor($max_val / $tick);
         $this->axis_ratio = $this->bounds->height / $max_val;
 
-        $axis_style = array('stroke' => '#999', 'stroke-width' => 2, 'fill' => 'none');
+        $axis_style = array('stroke' => '#999', 'stroke-width' => 1, 'fill' => 'none');
         $tick_style = array('stroke' => '#bbb', 'stroke-width' => 1);
-        $y_axis_text_style = array('text-anchor' => 'end');
+        $y_axis_text_style = array('text-anchor' => 'end', 'font-size' => 10);
+
+        $axis_g = $this->canvas->addGroup(0, 0);
 
         // x and y axis
-        $this->canvas->addPolyline(
-            array(
-                $this->bounds->left, $this->bounds->top,
-                $this->bounds->left, $this->bounds->bottom,
-                $this->bounds->right, $this->bounds->bottom
-            ),
-            $axis_style
-        );
+        $axis = $axis_g->addPolyline($axis_style);
+        $axis->addPoint($this->bounds->left + .5, $this->bounds->top);
+        $axis->addPoint($this->bounds->left + .5, $this->bounds->bottom + .5);
+        $axis->addPoint($this->bounds->right, $this->bounds->bottom + .5);
 
         // draw the tick lines
         for ($i = 1; $i < $ticks; $i++) {
-            $tick_line_y = $this->bounds->bottom - ($this->axis_ratio * $tick * $i);
-            $this->canvas->addLine(
+            $tick_line_y = $this->bounds->bottom - ($this->axis_ratio * $tick * $i) + .5;
+            $axis_g->addLine(
                 $this->bounds->left,
                 $tick_line_y,
                 $this->bounds->right,
                 $tick_line_y,
                 $tick_style
             );
-            $this->canvas->addText($tick * $i, $this->bounds->left-5, $tick_line_y+5, $y_axis_text_style);
+            $axis_g->addText($tick * $i, $this->bounds->left-5, $tick_line_y+5, $y_axis_text_style);
         }
 
         // top line
-        $this->canvas->addLine(
+        $axis_g->addLine(
             $this->bounds->left,
-            $this->bounds->top,
+            $this->bounds->top + .5,
             $this->bounds->right,
-            $this->bounds->top,
+            $this->bounds->top + .5,
             $tick_style
         );
 
         // top and bottom numbers
-        $this->canvas->addText('0', $this->bounds->left-5, $this->bounds->bottom+5, $y_axis_text_style);
-        $this->canvas->addText($max_val, $this->bounds->left-5, $this->bounds->top+5, $y_axis_text_style);
+        $axis_g->addText('0', $this->bounds->left-5, $this->bounds->bottom+5, $y_axis_text_style);
+        $axis_g->addText($max_val, $this->bounds->left-5, $this->bounds->top+5, $y_axis_text_style);
 
         // x axis labels
         if ($this->data_is_labeled) {
-            $label_style = array('text-anchor' => 'middle');
+            $label_style = array('text-anchor' => 'middle', 'font-size' => 10);
             $values = count($this->data_values);
             $section_width = $this->bounds->width / $values;
             $half_section = $section_width / 2;
+            $label_g = $this->canvas->addGroup(
+                $this->bounds->left + $half_section, 
+                $this->bounds->bottom + 15,
+                $label_style
+            );
 
             foreach ($this->data_labels as $i => $label) {
-
-                $this->canvas->addText(
+                $label_g->addText(
                     $label,
-                    $this->bounds->left + $half_section + ($section_width * $i),
-                    $this->bounds->bottom + 15,
-                    $label_style
+                    $section_width * $i,
+                    0
                 );
             }
         }

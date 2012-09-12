@@ -152,7 +152,7 @@ class Svg
     {
         $g = $this->root_node->addChild('g');
         // translate because g elements don't have x and y attributes.
-        if ($x != 0 && $y != 0)
+        if ($x != 0 || $y != 0)
             $attrs['transform'] = "translate($x,$y)";
         $this->setAttributes($g, $attrs);
 

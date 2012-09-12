@@ -21,9 +21,7 @@ class BarGraph extends Graph
         // background
         $bg_style = array('fill' => '#eee', 'stroke' => '#ddd', 'stroke-width' => 2);
         $this->canvas->addRect(0, 0, $width, $height, $bg_style);
-
         $this->draw_axis();
-
         $this->draw_bars();
     }
 
@@ -38,16 +36,20 @@ class BarGraph extends Graph
         $section_width = $this->bounds->width / $values;
 
         $bar_style = array('fill' => $this->next_colour());
+        $g = $this->canvas->addGroup(
+            $this->bounds->left,
+            $this->bounds->top,
+            $bar_style
+        );
 
         for ($i = 0; $i < $values; $i++) {
             $bar_height = $this->data_values[$i] * $this->axis_ratio;
 
-            $this->canvas->addRect(
-                $this->bounds->left + ($section_width * $i) + 5,
-                $this->bounds->bottom - $bar_height,
-                $section_width-10,
-                $bar_height,
-                $bar_style
+            $g->addRect(
+                $section_width * $i + 1,
+                $this->bounds->height - round($bar_height) + .5,
+                $section_width-1,
+                $bar_height
             );
         }
     }
