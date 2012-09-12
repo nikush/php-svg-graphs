@@ -195,6 +195,16 @@ class Svg
 
         return $svg_str;
     }
+
+    /**
+     * Alias for the render() method.
+     *
+     * @return  string
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
 }
 
 /**
