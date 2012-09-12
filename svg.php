@@ -12,7 +12,7 @@ class Svg
      *
      * @var SimpleXMLElement
      */
-    private $root_node;
+    protected $root_node;
 
     /**
      * Create a blank SVG document.
@@ -158,6 +158,26 @@ class Svg
     }
 
     /**
+     * Add a group element to the image.
+     *
+     * All the same methods available to this class are available the SvgGroup
+     * element that gets returned.
+     *
+     * @param   array   $attrs
+     * @return  SvgGroup
+     */
+    public function addGroup($x, $y, $attrs=array())
+    {
+        $g = $this->root_node->addChild('g');
+        // translate because g elements don't have x and y attributes.
+        if ($x != 0 && $y != 0)
+            $attrs['transform'] = "translate($x,$y)";
+        $this->setAttributes($g, $attrs);
+
+        return new SvgGroup($g);
+    }
+
+    /**
      * Set attributes on the SimpleXMLElement.
      *
      * @param   SimpleXMLElement    $element
@@ -175,8 +195,8 @@ class Svg
      * Render the SVG element as a string.
      *
      * If $xmlDoc is set to true, the XML document header will be added.
-     * This is used when the image is to be saved saved into its own file.
-     * Set it to false (or leave it blank) when embedding the imade in a web
+     * This is used when the image is to be saved into its own file.
+     * Set it to false (or leave it blank) when embedding the image in a web
      * page.
      *
      * @param   boolean $xmlDoc
@@ -192,5 +212,24 @@ class Svg
         }
 
         return $svg_str;
+    }
+}
+
+/**
+ * SVG group element.
+ *
+ * @author  Nikush Patel
+ */
+class SvgGroup extends Svg
+{
+    /**
+     * Wraps the Svg class around a blank group element to decorate it with all
+     * of the Svg class' methods.
+     *
+     * @param   SimpleXMLElement    $g
+     */
+    public function __construct(SimpleXMLElement $g)
+    {
+        $this->root_node = $g;
     }
 }
