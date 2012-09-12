@@ -99,31 +99,14 @@ class Svg
     /**
      * Add a polyline to the image.
      *
-     * Points must be provided in a single dimensional array with every number
-     * occupying its own index in the array.
-     *
-     * @param   array   $points
      * @param   array   $attrs
-     * @return  void
+     * @return  SvgPolyline
      */
-    public function addPolyline($points, $attrs=array())
+    public function addPolyline($attrs=array())
     {
-        $num_points = count($points);
-        if ($num_points % 2 != 0)
-            throw new Exception('Incorrect number of points provided.');
-
         $polyline = $this->root_node->addChild('polyline');
-
-        $points_str = '';
-        for ($i = 0; $i < $num_points; $i += 2) {
-            $pointx = $points[$i];
-            $pointy = $points[$i+1];
-
-            $points_str .= "$pointx,$pointy ";
-        }
-
-        $attrs['points'] = $points_str;
         $this->setAttributes($polyline, $attrs);
+        return new SvgPolyline($polyline);
     }
 
     /**
@@ -231,5 +214,71 @@ class SvgGroup extends Svg
     public function __construct(SimpleXMLElement $g)
     {
         $this->root_node = $g;
+    }
+}
+
+/**
+ * SVG polyline element.
+ *
+ * @author  Nikush Patel
+ */
+class SvgPolyline
+{
+    /**
+     * The polyline object
+     *
+     * @var SimpleXMLElement
+     */
+    private $polyline;
+
+    /**
+     * The previous point plotted.  Used when plotting relative points.
+     *
+     * @var array
+     */
+    private $last_point;
+
+    /**
+     * Wrap the class around a blank polyline element to decorate it with
+     * polyline drawing methods.
+     *
+     * @param   SimpleXMLElement    $polyline
+     */
+    public function __construct(SimpleXMLElement $polyline)
+    {
+        $this->polyline = $polyline;
+        $this->polyline['points'] = '';
+    }
+
+    /**
+     * Plot a point.
+     *
+     * @param   number  $x
+     * @param   number  $y
+     * @return  void
+     */
+    public function addPoint($x, $y)
+    {
+        $this->last_point = array($x, $y);
+        $this->polyline['points'] .= "$x,$y ";
+    }
+
+    /**
+     * Plot a point relative the last point plotted.
+     *
+     * @param   number  $x
+     * @param   number  $y
+     * @return  void
+     */
+    public function addRelPoint($x, $y)
+    {
+        if (!isset($this->last_point))
+            $this->last_point = array(0,0);
+
+        $new_point = $this->last_point;
+        $new_point[0] += $x;
+        $new_point[1] += $y;
+        $this->last_point = $new_point;
+        $this->polyline['points'] .= "{$new_point[0]},{$new_point[1]} ";
     }
 }
