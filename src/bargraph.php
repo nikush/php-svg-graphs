@@ -32,8 +32,12 @@ class BarGraph extends Graph
      */
     private function draw_bars()
     {
+        $max_width = 20;
         $values = count($this->data_values);
+
         $section_width = $this->bounds->width / $values;
+        $bar_width = min($max_width, $section_width);
+        $bar_padding = ($section_width - $bar_width) / 2;
 
         $bar_style = array('fill' => $this->next_colour());
         $g = $this->canvas->addGroup(
@@ -46,9 +50,9 @@ class BarGraph extends Graph
             $bar_height = $this->data_values[$i] * $this->axis_ratio;
 
             $g->addRect(
-                $section_width * $i + 1,
+                1 + ($section_width * $i) + $bar_padding,
                 $this->bounds->height - round($bar_height) + .5,
-                $section_width-1,
+                $bar_width-1,
                 $bar_height
             );
         }
