@@ -8,7 +8,7 @@ $attrs = array(
     'stroke' => 'blue'
 );
 
-$svg = new Nikush\Graphs\Svg\Svg(200, 200);
+$svg = new Nikush\Svg\Svg(200, 200);
 
 $svg->addRect(0, 0, 50, 50, $attrs);
 $svg->addCircle(100, 25, 25, $attrs);

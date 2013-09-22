@@ -1,6 +1,6 @@
 <?php
 
-namespace Nikush\Graphs\Svg;
+namespace Nikush\Svg;
 
 /**
  * SVG group element.

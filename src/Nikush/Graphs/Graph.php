@@ -2,7 +2,7 @@
 
 namespace Nikush\Graphs;
 
-use Nikush\Graphs\Svg\Svg;
+use Nikush\Svg\Svg;
 
 /**
  * Abstract graph class.
