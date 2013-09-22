@@ -3,18 +3,14 @@ require('SplClassLoader.php');
 $classLoader = new SplClassLoader('Nikush', '../src');
 $classLoader->register();
 
-$data_set = array(
-    'Bender' => 50,
-    'Fry' => 20,
-    'Zoidberg' => 27,
-    'Hermes' => 25,
-    'Hebert' => 20,
-    'Lela' => 23,
-    'Amy' => 32,
-    'Wormstrom' => 50,
-    'Scruffy' => 15,
-    'Someone' => 20,
-);
+$data_set = array();
+
+$handle = fopen('data.csv', 'r');
+while ($data = fgetcsv($handle, 1000)) {
+    $k = $data[0];
+    $v = $data[1];
+    $data_set[$k] = $v;
+}
 
 $bar = new Nikush\Graphs\BarGraph(500, 400, $data_set);
 
