@@ -1,11 +1,13 @@
 <?php
 
+namespace Nikush\Graphs\Svg;
+
 /**
  * SVG group element.
  *
  * @author  Nikush Patel
  */
-class SvgGroup extends Svg
+class Group extends Svg
 {
     /**
      * Wraps the Svg class around a blank group element to decorate it with all
@@ -13,7 +15,7 @@ class SvgGroup extends Svg
      *
      * @param   SimpleXMLElement    $g
      */
-    public function __construct(SimpleXMLElement $g)
+    public function __construct(\SimpleXMLElement $g)
     {
         $this->root_node = $g;
     }

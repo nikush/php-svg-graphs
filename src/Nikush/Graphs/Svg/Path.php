@@ -1,11 +1,13 @@
 <?php
 
+namespace Nikush\Graphs\Svg;
+
 /**
  * SVG path element.
  *
  * @author  Nikush Patel
  */
-class SvgPath
+class Path
 {
     /**
      * The path element.
@@ -20,7 +22,7 @@ class SvgPath
      *
      * @param   SimpleXMLElement    $path
      */
-    public function __construct(SimpleXMLElement $path)
+    public function __construct(\SimpleXMLElement $path)
     {
         $this->path = $path;
         $this->path['d'] = '';

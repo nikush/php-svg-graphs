@@ -1,5 +1,8 @@
 <?php
-require_once('svg.php');
+
+namespace Nikush\Graphs;
+
+use Nikush\Graphs\Svg\Svg;
 
 /**
  * Abstract graph class.
@@ -103,7 +106,7 @@ class Graph
         $inner_width = $width - ($margin * 2);
         $inner_height = $height - ($margin * 2);
 
-        $this->bounds = new StdClass;
+        $this->bounds = new \StdClass;
         $this->bounds->left = $margin + 20;
         $this->bounds->right = $inner_width + $margin;
         $this->bounds->top = $margin + 10;
@@ -181,7 +184,7 @@ class Graph
             $section_width = $this->bounds->width / $values;
             $half_section = $section_width / 2;
             $label_g = $this->canvas->addGroup(
-                $this->bounds->left + $half_section, 
+                $this->bounds->left + $half_section,
                 $this->bounds->bottom + 15,
                 $label_style
             );

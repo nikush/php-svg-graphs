@@ -1,5 +1,7 @@
 <?php
 
+namespace Nikush\Graphs;
+
 /**
  * Draw an SVG bar graph.
  *

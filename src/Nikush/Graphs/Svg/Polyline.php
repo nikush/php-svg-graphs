@@ -1,11 +1,13 @@
 <?php
 
+namespace Nikush\Graphs\Svg;
+
 /**
  * SVG polyline element.
  *
  * @author  Nikush Patel
  */
-class SvgPolyline
+class Polyline
 {
     /**
      * The polyline object
@@ -27,7 +29,7 @@ class SvgPolyline
      *
      * @param   SimpleXMLElement    $polyline
      */
-    public function __construct(SimpleXMLElement $polyline)
+    public function __construct(\SimpleXMLElement $polyline)
     {
         $this->polyline = $polyline;
         $this->polyline['points'] = '';

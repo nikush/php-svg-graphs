@@ -1,5 +1,7 @@
 <?php
 
+namespace Nikush\Graphs\Svg;
+
 /**
  * SVG image generator.
  *
@@ -22,7 +24,7 @@ class Svg
      */
     public function __construct($width = 0, $height = 0)
     {
-        $this->root_node = new SimpleXMLElement('<svg></svg>');
+        $this->root_node = new \SimpleXMLElement('<svg></svg>');
 
         if ($width > 0) {
             $this->root_node->addAttribute('width', $width);
@@ -100,26 +102,26 @@ class Svg
      * Add a polyline to the image.
      *
      * @param   array   $attrs
-     * @return  SvgPolyline
+     * @return  Polyline
      */
     public function addPolyline($attrs=array())
     {
         $polyline = $this->root_node->addChild('polyline');
         $this->setAttributes($polyline, $attrs);
-        return new SvgPolyline($polyline);
+        return new Polyline($polyline);
     }
 
     /**
      * Add a path to the image.
      *
      * @param   array   $attrs
-     * @return  SvgPath
+     * @return  Path
      */
     public function addPath($attrs=array())
     {
         $path = $this->root_node->addChild('path');
         $this->setAttributes($path, $attrs);
-        return new SvgPath($path);
+        return new Path($path);
     }
 
     /**
@@ -146,7 +148,7 @@ class Svg
      * element that gets returned.
      *
      * @param   array   $attrs
-     * @return  SvgGroup
+     * @return  Group
      */
     public function addGroup($x, $y, $attrs=array())
     {
@@ -156,7 +158,7 @@ class Svg
             $attrs['transform'] = "translate($x,$y)";
         $this->setAttributes($g, $attrs);
 
-        return new SvgGroup($g);
+        return new Group($g);
     }
 
     /**
@@ -166,7 +168,7 @@ class Svg
      * @param   array   $attributes
      * @return  void
      */
-    protected function setAttributes(SimpleXMLElement $element, $attributes)
+    protected function setAttributes(\SimpleXMLElement $element, $attributes)
     {
         foreach ($attributes as $name => $value) {
             $element->addAttribute($name, $value);
