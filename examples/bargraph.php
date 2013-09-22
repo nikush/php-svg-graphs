@@ -14,4 +14,4 @@ while ($data = fgetcsv($handle, 1000)) {
 
 $bar = new Nikush\Graphs\BarGraph(500, 400, $data_set);
 
-echo $bar->render();
+echo $bar;

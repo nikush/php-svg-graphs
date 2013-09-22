@@ -14,4 +14,4 @@ while ($data = fgetcsv($handle, 1000)) {
 
 $line = new Nikush\Graphs\LineGraph(500, 400, $data_set);
 
-echo $line->render();
+echo $line;

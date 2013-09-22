@@ -128,6 +128,16 @@ class Graph
     }
 
     /**
+     * Alias for the render() method.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
+
+    /**
      * Draw the axis onto the graph.
      *
      * @return  void
